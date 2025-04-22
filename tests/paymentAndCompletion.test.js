@@ -5,64 +5,64 @@ import { CartPage } from "../page_objects/cartPage";
 import { CheckoutPage } from "../page_objects/checkoutStepOnePage";
 import config from "../config/config";
 test.describe("Saucedemo Payment and Order Completion Tests", () => {
-  // Тест для проверки полного процесса оплаты и завершения заказа
+  // Test for verifying the complete payment and order completion process
   test('Complete purchase with specific customer data', async ({ page }) => {
-    // Логин на сайт
+    // Login to the website
     const loginPage = new LoginPage(page);
     await loginPage.loginToPortal(config.Saucedemo_standard_user_LOGIN, config.Saucedemo_standard_user_PASSWORD);
-    // Проверка успешного входа и перехода на страницу инвентаря
+    // Verify successful login and navigation to the inventory page
     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
-    // Добавление товара в корзину
+    // Add product to cart
     const inventoryPage = new InventoryPage(page);
     const productName = 'Sauce Labs Backpack';
     await inventoryPage.addProductToCart(productName);
-    // Проверка, что товар добавлен в корзину
+    // Verify that the product has been added to the cart
     expect(await inventoryPage.getCartCount()).toBe(1);
-    // Переход в корзину
+    // Navigate to the cart
     await inventoryPage.goToCart();
-    // Проверка, что мы находимся на странице корзины и в ней есть товар
+    // Verify that we are on the cart page and the product is in the cart
     const cartPage = new CartPage(page);
     await cartPage.isLoaded();
     expect(await cartPage.hasItem(productName)).toBe(true);
-    // Переход к оформлению заказа
+    // Proceed to checkout
     await cartPage.checkout();
-    // Заполнение данных покупателя на странице checkout-step-one
+    // Fill customer information on the checkout-step-one page
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.isStepOneLoaded();
     await checkoutPage.fillCheckoutInfo('Ivan', 'Maxim', '777777');
-    // Переход к странице подтверждения заказа
+    // Proceed to the order confirmation page
     await checkoutPage.continueToStepTwo();
-    // Проверка, что мы находимся на странице подтверждения заказа
+    // Verify that we are on the order confirmation page
     await checkoutPage.isStepTwoLoaded();
     expect(await checkoutPage.hasItem(productName)).toBe(true);
-    // Получение и проверка финансовой информации
+    // Get and verify financial information
     const subtotal = await checkoutPage.getSubtotal();
     const tax = await checkoutPage.getTax();
     const total = await checkoutPage.getTotal();
-    // Проверка корректности расчета итоговой суммы
+    // Verify the correctness of the total amount calculation
     expect(total).toBeCloseTo(subtotal + tax, 2);
-    // Завершение оформления заказа
+    // Complete the checkout process
     await checkoutPage.finishCheckout();
-    // Проверка, что мы находимся на странице успешного завершения заказа
+    // Verify that we are on the order completion success page
     await checkoutPage.isCheckoutCompleteLoaded();
-    // Проверка наличия контейнера завершения заказа
+    // Verify the presence of the checkout complete container
     await expect(page.locator('#checkout_complete_container')).toBeVisible();
-    // Проверка сообщения об успешном завершении заказа
+    // Verify the successful order completion message
     const completeMessage = await checkoutPage.getCompleteMessage();
     expect(completeMessage).toContain('Thank you');
-    // Возврат на страницу с товарами
+    // Return to the products page
     await checkoutPage.backToProducts();
-    // Проверка, что мы вернулись на страницу инвентаря
+    // Verify that we have returned to the inventory page
     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
   });
-  // Тест для проверки полного процесса с несколькими товарами
+  // Test for verifying the complete process with multiple items
   test('Complete purchase with multiple items', async ({ page }) => {
-    // Логин на сайт
+    // Login to the website
     const loginPage = new LoginPage(page);
     await loginPage.loginToPortal(config.Saucedemo_standard_user_LOGIN, config.Saucedemo_standard_user_PASSWORD);
-    // Проверка успешного входа
+    // Verify successful login
     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
-    // Добавление нескольких товаров в корзину
+    // Add multiple products to the cart
     const inventoryPage = new InventoryPage(page);
     const products = [
       'Sauce Labs Backpack',
@@ -72,48 +72,48 @@ test.describe("Saucedemo Payment and Order Completion Tests", () => {
     for (const product of products) {
       await inventoryPage.addProductToCart(product);
     }
-    // Проверка, что все товары добавлены в корзину
+    // Verify that all products have been added to the cart
     expect(await inventoryPage.getCartCount()).toBe(products.length);
-    // Переход в корзину
+    // Navigate to the cart
     await inventoryPage.goToCart();
-    // Проверка, что мы находимся на странице корзины и в ней есть все товары
+    // Verify that we are on the cart page and all products are in the cart
     const cartPage = new CartPage(page);
     await cartPage.isLoaded();
     for (const product of products) {
       expect(await cartPage.hasItem(product)).toBe(true);
     }
-    // Переход к оформлению заказа
+    // Proceed to checkout
     await cartPage.checkout();
-    // Заполнение данных покупателя
+    // Fill customer information
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.isStepOneLoaded();
     await checkoutPage.fillCheckoutInfo('Ivan', 'Maxim', '777777');
-    // Переход к странице подтверждения заказа
+    // Proceed to the order confirmation page
     await checkoutPage.continueToStepTwo();
-    // Проверка, что мы находимся на странице подтверждения заказа
+    // Verify that we are on the order confirmation page
     await checkoutPage.isStepTwoLoaded();
-    // Проверка наличия всех товаров в заказе
+    // Verify that all products are in the order
     for (const product of products) {
       expect(await checkoutPage.hasItem(product)).toBe(true);
     }
-    // Получение и проверка финансовой информации
+    // Get and verify financial information
     const subtotal = await checkoutPage.getSubtotal();
     const tax = await checkoutPage.getTax();
     const total = await checkoutPage.getTotal();
-    // Проверка корректности расчета итоговой суммы
+    // Verify the correctness of the total amount calculation
     expect(total).toBeCloseTo(subtotal + tax, 2);
-    // Завершение оформления заказа
+    // Complete the checkout process
     await checkoutPage.finishCheckout();
-    // Проверка, что мы находимся на странице успешного завершения заказа
+    // Verify that we are on the order completion success page
     await checkoutPage.isCheckoutCompleteLoaded();
-    // Проверка наличия контейнера завершения заказа
+    // Verify the presence of the checkout complete container
     await expect(page.locator('#checkout_complete_container')).toBeVisible();
-    // Проверка сообщения об успешном завершении заказа
+    // Verify the successful order completion message
     const completeMessage = await checkoutPage.getCompleteMessage();
     expect(completeMessage).toContain('Thank you');
-    // Возврат на страницу с товарами
+    // Return to the products page
     await checkoutPage.backToProducts();
-    // Проверка, что мы вернулись на страницу инвентаря
+    // Verify that we have returned to the inventory page
     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
   });
 });
