@@ -15,27 +15,69 @@ test.describe("Saucedemo Cart Operations Tests", () => {
   test('Add product to cart', async ({ page }) => {
     const inventoryPage = new InventoryPage(page);
     const productName = 'Sauce Labs Backpack';
+    
+    // Verify cart is empty at the beginning
     expect(await inventoryPage.getCartCount()).toBe(0);
+    // Verify the add to cart button is visible for the product
+    const addButton = page.locator(`[data-test="add-to-cart-${productName.toLowerCase().replace(/ /g, '-')}"]`);
+    await expect(addButton).toBeVisible();
+    
+    // Add product to cart and verify
     await inventoryPage.addProductToCart(productName);
     expect(await inventoryPage.getCartCount()).toBe(1);
+    
+    // Verify the add button changed to remove button
+    const removeButton = page.locator(`[data-test="remove-${productName.toLowerCase().replace(/ /g, '-')}"]`);
+    await expect(removeButton).toBeVisible();
+    
+    // Verify cart badge is visible and shows correct count
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await expect(cartBadge).toBeVisible();
+    await expect(cartBadge).toHaveText('1');
+    
+    // Navigate to cart and verify product is there
     await inventoryPage.goToCart();
     const cartPage = new CartPage(page);
     await cartPage.isLoaded();
     expect(await cartPage.hasItem(productName)).toBe(true);
     expect(await cartPage.getCartItemCount()).toBe(1);
+    
+    // Verify product details in cart
+    const productElement = page.locator('.inventory_item_name').filter({ hasText: productName });
+    await expect(productElement).toBeVisible();
+    
+    // Verify we can continue shopping from cart
+    await cartPage.continueShopping();
+    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
   });
   
   test('Remove product from cart', async ({ page }) => {
     const inventoryPage = new InventoryPage(page);
     const productName = 'Sauce Labs Bike Light';
+    
+    // Verify cart is empty at the beginning
+    expect(await inventoryPage.getCartCount()).toBe(0);
+    // Add product to cart and verify
     await inventoryPage.addProductToCart(productName);
     expect(await inventoryPage.getCartCount()).toBe(1);
+    // Navigate to cart and verify product is there
     await inventoryPage.goToCart();
     const cartPage = new CartPage(page);
     await cartPage.isLoaded();
     expect(await cartPage.hasItem(productName)).toBe(true);
+    // Verify the remove button is visible for the product
+    const removeButton = page.locator(`[data-test="remove-${productName.toLowerCase().replace(/ /g, '-')}"]`);
+    await expect(removeButton).toBeVisible();
+    // Remove the product and verify it's no longer in the cart
     await cartPage.removeItem(productName);
     expect(await cartPage.getCartItemCount()).toBe(0);
+    expect(await cartPage.hasItem(productName)).toBe(false);
+    // Verify cart badge is updated after removal
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await expect(cartBadge).not.toBeVisible();
+    // Verify we can continue shopping after removing item
+    await cartPage.continueShopping();
+    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
   });
   
   test('Add multiple products to cart', async ({ page }) => {
