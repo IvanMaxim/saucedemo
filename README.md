@@ -40,8 +40,8 @@ This project contains automated tests for the [Saucedemo](https://www.saucedemo.
 
 1. Clone the repository
    ```
-   git clone https://github.com/yourusername/saucedemo-playwright-tests.git
-   cd saucedemo-playwright-tests
+   git clone https://github.com/IvanMaxim/saucedemo.git
+   cd saucedemo
    ```
 
 2. Install dependencies
