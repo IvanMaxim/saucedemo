@@ -8,11 +8,11 @@ export class InventoryPage {
     this.inventoryContainer = '#inventory_container';
     this.inventoryItems = '.inventory_item';
     this.inventoryItemName = '.inventory_item_name';
-    this.addToCartButton = '[data-test^="add-to-cart"]';
-    this.removeButton = '[data-test^="remove"]';
+    this.addToCartButton = '[id^="add-to-cart"]';
+    this.removeButton = '[id^="remove"]';
     this.shoppingCartBadge = '#shopping_cart_container .shopping_cart_badge';
     this.shoppingCartLink = '#shopping_cart_container';
-    this.sortDropdown = '[data-test="product_sort_container"]';
+    this.sortDropdown = '.product_sort_container';
     
     // Menu selectors
     this.burgerMenuButton = '#react-burger-menu-btn';
@@ -41,8 +41,8 @@ export class InventoryPage {
       // Convert product name to lowercase and replace spaces with hyphens
       const productId = productName.toLowerCase().replace(/ /g, '-');
       
-      // Try to find the button by its data-test attribute
-      const buttonSelector = `[data-test="add-to-cart-${productId}"]`;
+      // Try to find the button by its id attribute
+      const buttonSelector = `#add-to-cart-${productId}`;
       const button = this.page.locator(buttonSelector);
       
       // Check if the button exists and is visible

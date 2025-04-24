@@ -6,11 +6,11 @@ export class CheckoutPage {
     
     // Checkout information form selectors
     this.checkoutContainer = '#checkout_info_container';
-    this.firstNameInput = '[data-test="firstName"]';
-    this.lastNameInput = '[data-test="lastName"]';
-    this.postalCodeInput = '[data-test="postalCode"]';
-    this.continueButton = '[data-test="continue"]';
-    this.cancelButton = '[data-test="cancel"]';
+    this.firstNameInput = '#first-name';
+    this.lastNameInput = '#last-name';
+    this.postalCodeInput = '#postal-code';
+    this.continueButton = '#continue';
+    this.cancelButton = '#cancel';
     this.errorMessage = '[data-test="error"]';
     
     // Checkout overview selectors
@@ -21,12 +21,12 @@ export class CheckoutPage {
     this.summarySubtotalLabel = '.summary_subtotal_label';
     this.summaryTaxLabel = '.summary_tax_label';
     this.summaryTotalLabel = '.summary_total_label';
-    this.finishButton = '[data-test="finish"]';
+    this.finishButton = '#finish';
     
     // Checkout complete selectors
     this.checkoutCompleteContainer = '#checkout_complete_container';
     this.completeHeader = '.complete-header';
-    this.backHomeButton = '[data-test="back-to-products"]';
+    this.backHomeButton = '#back-to-products';
     
     // Menu selectors
     this.burgerMenuButton = '#react-burger-menu-btn';

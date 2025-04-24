@@ -28,8 +28,8 @@ export class CheckoutStepTwoPage {
     this.totalLabel = '[data-test="total-label"]';
     
     // Button selectors
-    this.cancelButton = '[data-test="cancel"]';
-    this.finishButton = '[data-test="finish"]';
+    this.cancelButton = '#cancel';
+    this.finishButton = '#finish';
     
     // Menu selectors
     this.burgerMenuButton = '#react-burger-menu-btn';

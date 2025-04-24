@@ -13,13 +13,13 @@ export class CartPage {
     // Cart item price selector
     this.cartItemPrice = '.inventory_item_price';
     // Remove button selector
-    this.removeButton = '[data-test^="remove"]';
+    this.removeButton = '[id^="remove"]';
     
     // Navigation buttons
     // Continue shopping button selector
-    this.continueShoppingButton = '[data-test="continue-shopping"]';
+    this.continueShoppingButton = '#continue-shopping';
     // Checkout button selector
-    this.checkoutButton = '[data-test="checkout"]';
+    this.checkoutButton = '#checkout';
     
     // Menu selectors
     // Burger menu button selector

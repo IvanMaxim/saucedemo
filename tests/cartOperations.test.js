@@ -34,7 +34,6 @@ test.describe("Saucedemo Cart Operations Tests", () => {
     const cartBadge = page.locator('.shopping_cart_badge');
     await expect(cartBadge).toBeVisible();
     await expect(cartBadge).toHaveText('1');
-    
     // Navigate to cart and verify product is there
     await inventoryPage.goToCart();
     const cartPage = new CartPage(page);

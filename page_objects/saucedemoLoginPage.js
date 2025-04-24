@@ -4,9 +4,9 @@ import { expect } from "@playwright/test";
 export class LoginPage {
   constructor(page) {
     this.page = page;
-    this.usernameInput = '[data-test="username"]';
-    this.passwordInput = '[data-test="password"]';
-    this.loginButton = '[data-test="login-button"]';
+    this.usernameInput = '#user-name';
+    this.passwordInput = '#password';
+    this.loginButton = '#login-button';
   }
 
   async loginToPortal(username, password) {
@@ -22,7 +22,7 @@ export class LoginPage {
     await this.page.waitForLoadState("networkidle");
     
     // Check if user is locked out
-    const errorLocator = this.page.locator('[data-test="error"]');
+    const errorLocator = this.page.locator('.error-message-container');
     const hasError = await errorLocator.isVisible().catch(() => false);
     
     // If no error, user successfully logged in
